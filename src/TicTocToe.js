@@ -1,27 +1,32 @@
 import React, { useState, useEffect } from "react";
+import { Button } from 'react-bootstrap';
+
 
 const TicTocToe = () => {
   const [cells, setcells] = useState(new Array(9).fill(null));
   const [winning, setWinning] = useState(null);
+  const [style,setStyle] = useState([]);
+  
 
-     console.log(cells , "cells")
-     console.log(winning , "winning")
+  console.log(cells, "cells");
+  console.log(winning, "winning");
 
   useEffect(() => {
-    const ComputerTurn = cells.filter((cell) => cell !== null).length % 2 === 1;
+    const Computer = cells.filter((cell) => cell !== null).length % 2 === 1;
     const EmptyCells = cells.map((cell, index) => cell === null ? index : null);
-
-    const ComputerMove = (num) => {
+  
+    const ComputerMove = (num) => { 
       let newcells = cells;
-      newcells[num] = "O";
+      newcells[num] = "O" ? "X" : "O";
       setcells([...newcells]);
-    };
+    }; 
 
-    if (ComputerTurn) {
+    if (Computer) {
       const random = EmptyCells[Math.ceil(Math.random() * EmptyCells.length)];
-      console.log(random , "random")
+      console.log(random, "random");
       ComputerMove(random);
     }
+     
     const Win = [
       [0, 1, 2],
       [3, 4, 5],
@@ -32,20 +37,28 @@ const TicTocToe = () => {
       [0, 4, 8],
       [2, 4, 6],
     ];
-
+      
     for (let i = 0; i < Win.length; i++) {
       const [a, b, c] = Win[i];
       if (cells[a] && cells[a] === cells[b] && cells[b] === cells[c]) {
+         setStyle(Win[i]);
         return setWinning(cells[a]);
       }
-    }
+    } 
   }, [cells]);
 
+  
+  
+
   const ClickHandle = (num) => {
-    const PlayerTurn = cells.filter((cell) => cell !== null).length % 2 === 0;
-    if (PlayerTurn) {
+    const newcells = cells.slice();
+    if (newcells[num] || winning) {
+      return;
+    }
+    const Player = cells.filter((cell) => cell !== null).length % 2 === 0;
+    if (Player) {
       let newcells = cells;
-      newcells[num] = "X";
+      newcells[num] = "X" ? "O" : "X";
       setcells([...newcells]);
     }
   };
@@ -56,12 +69,17 @@ const TicTocToe = () => {
   };
 
   const Cells = ({ num }) => {
-    return <td onClick={() => ClickHandle(num)}> {cells[num]} </td>;
+    return <td onClick={() => ClickHandle(num)}
+    style={{backgroundColor : (winning !== '' && style.includes(num)) && 'grey'  , 
+    color : (winning !== "" && style.includes(num)) && "white"}}> 
+    {cells[num]} </td>;
   };
 
   return (
     <div>
-      <h2> Tic Toc Toe Game </h2>
+      
+      <h2> Tic Toc Toe Game  </h2>
+      <h3> Computer Vs Player</h3>
 
       <div className="container">
         <table cellspacing="0">
@@ -84,12 +102,15 @@ const TicTocToe = () => {
           </tbody>
         </table>
       </div>
-      {winning && (
+      {winning &&  (
         <>
-          <h3>{winning} is the Winner</h3> 
-          <button onClick={() => Restart()}> Restart Game </button>
+          <h3>{winning} is the Winner</h3>
+          <Button variant="outline-secondary" onClick={() => Restart ()}> Restart Game </Button>
         </>
       )}
+      
+      
+
     </div>
   );
 };
