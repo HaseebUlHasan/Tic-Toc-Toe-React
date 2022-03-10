@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Button } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 
 const TicTocToe = () => {
   const [cells, setcells] = useState(new Array(9).fill(null));
   const [winning, setWinning] = useState(null);
   const [style,setStyle] = useState([]);
-  
+  const [player, setPlayer] = useState("");
+  const navigate = useNavigate();
 
   console.log(cells, "cells");
   console.log(winning, "winning");
@@ -17,8 +19,9 @@ const TicTocToe = () => {
   
     const ComputerMove = (num) => { 
       let newcells = cells;
-      newcells[num] = "O" ? "X" : "O";
+      newcells[num] = "O";
       setcells([...newcells]);
+      setPlayer("Computer");
     }; 
 
     if (Computer) {
@@ -56,9 +59,10 @@ const TicTocToe = () => {
       return;
     }
     const Player = cells.filter((cell) => cell !== null).length % 2 === 0;
-    if (Player) {
+    if (Player ) {
       let newcells = cells;
-      newcells[num] = "X" ? "O" : "X";
+      newcells[num] = "X";
+      setPlayer("Player");
       setcells([...newcells]);
     }
   };
@@ -66,6 +70,7 @@ const TicTocToe = () => {
   const Restart = () => {
     setWinning(null);
     setcells(Array(9).fill(null));
+    setStyle("");
   };
 
   const Cells = ({ num }) => {
@@ -102,13 +107,20 @@ const TicTocToe = () => {
           </tbody>
         </table>
       </div>
+    <br /> <br />
+
       {winning &&  (
         <>
-          <h3>{winning} is the Winner</h3>
-          <Button variant="outline-secondary" onClick={() => Restart ()}> Restart Game </Button>
+          <h3>{player} is the Winner</h3>
+          <Button variant="outline-secondary" onClick={() => Restart ()}> Restart Game </Button> <br />  <br />
         </>
       )}
-      
+       
+      <div >   
+        <Button variant="outline-primary" onClick={() => navigate("/")}>
+         Back
+      </Button>
+      </div>
       
 
     </div>

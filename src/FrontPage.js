@@ -13,7 +13,8 @@ const FrontPage = () => {
     const navigate = useNavigate();
 
   return (
-    <div>
+       <div >
+       
         <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar variant="dense">
@@ -24,13 +25,16 @@ const FrontPage = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-    </Box> <br /> <br /> <br /> <br /><br /><br /><br /><br />
-       
+    </Box> 
+    <h1> Tic Toc Toe Game</h1>  
+    
+    <br /> <br /> <br /> <br /><br /><br /><br /><br />
+
        <div> 
        <Button variant="primary" onClick={() => setShow(true)}>
         Start Tic Toc Toe Game
       </Button>
-
+           
       <Modal
         show={show}
         onHide={() => setShow(false)}
