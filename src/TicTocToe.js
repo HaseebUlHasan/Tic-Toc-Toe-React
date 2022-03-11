@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 const TicTocToe = () => {
   const [cells, setcells] = useState(new Array(9).fill(null));
-  const [winning, setWinning] = useState(null);
+  const [winning, setWinning] = useState("");
   const [style,setStyle] = useState([]);
   const [player, setPlayer] = useState("");
+  const [playerWin , setPlayerWin] = useState(0);
+  const [computerWin , setComputerWin] = useState(0);
   const navigate = useNavigate();
 
-  console.log(cells, "cells");
+  console.log(cells, "cells"); 
   console.log(winning, "winning");
 
   useEffect(() => {
@@ -21,7 +23,6 @@ const TicTocToe = () => {
       let newcells = cells;
       newcells[num] = "O";
       setcells([...newcells]);
-      setPlayer("Computer");
     }; 
 
     if (Computer) {
@@ -44,8 +45,16 @@ const TicTocToe = () => {
     for (let i = 0; i < Win.length; i++) {
       const [a, b, c] = Win[i];
       if (cells[a] && cells[a] === cells[b] && cells[b] === cells[c]) {
-         setStyle(Win[i]);
-        return setWinning(cells[a]);
+        setStyle(Win[i]);
+        setWinning(cells[a]);
+        if (cells[Win[i][0]] === "X") {
+          console.log(playerWin + 1 , "11")
+          setPlayer("Player");
+          setPlayerWin(playerWin + 1 )
+        } else {
+          setPlayer("Computer");
+          setComputerWin(computerWin + 1 )
+        }
       }
     } 
   }, [cells]);
@@ -86,8 +95,11 @@ const TicTocToe = () => {
       <h2> Tic Toc Toe Game  </h2>
       <h3> Computer Vs Player</h3>
 
+      <h5> Player : {playerWin} </h5>
+      <h5> Computer : {computerWin} </h5>
+
       <div className="container">
-        <table cellspacing="0">
+        <table cellSpacing="0">
           <tbody>
             <tr>
               <Cells num={0} />
@@ -112,7 +124,9 @@ const TicTocToe = () => {
       {winning &&  (
         <>
           <h3>{player} is the Winner</h3>
-          <Button variant="outline-secondary" onClick={() => Restart ()}> Restart Game </Button> <br />  <br />
+          <Button variant="outline-secondary" onClick={() => Restart()}> 
+          Restart Game 
+          </Button> <br />  <br />
         </>
       )}
        

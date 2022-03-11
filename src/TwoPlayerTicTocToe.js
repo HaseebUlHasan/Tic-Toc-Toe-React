@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const TwoPlayerTicTocToe = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const [turns, setTurns] = useState("X");
   const [xScore, setXScore] = useState(0);
   const [oScore, setOScore] = useState(0);
@@ -12,12 +13,12 @@ const TwoPlayerTicTocToe = () => {
   const [style, setStyle] = useState([]);
   const [Playername, setPlayerName] = useState(state.firstname);
   const [winPlayername, setwinPlayerName] = useState("");
-  const [firstWin , setFirstWin] = useState({X : 0});
-  const [secondtWin , setSecondWin] = useState({O : 0});
-  const navigate = useNavigate();
+  const [firstWin, setFirstWin] = useState(0);
+  const [secondWin, setSecondWin] = useState(0);
+  const [show, setShow] = useState(false);
 
- 
- 
+  const handleClose = () => setShow(false);
+
   const handleBox = (num) => {
     const chance = cells.slice();
     if (chance[num] || winning) {
@@ -29,21 +30,16 @@ const TwoPlayerTicTocToe = () => {
       setXScore(xScore + 1);
       setPlayerName(state.secondname);
       setwinPlayerName(state.firstname);
-      
     } else {
-
       chance[num] = "O";
       setOScore(oScore + 1);
       setPlayerName(state.firstname);
-      setwinPlayerName(state.secondname)
+      setwinPlayerName(state.secondname);
       setTurns("X");
     }
     setCells(chance);
     Winning(chance);
-  
   };
-  
- 
 
   const Winning = (chance) => {
     const Win = [
@@ -60,21 +56,26 @@ const TwoPlayerTicTocToe = () => {
     for (let i = 0; i < Win.length; i++) {
       const [a, b, c] = Win[i];
       if (chance[a] && chance[a] === chance[b] && chance[b] === chance[c]) {
-        setStyle(Win[i]);
-        setFirstWin ({...firstWin , X : firstWin.X + 1})
-        setSecondWin ({...secondtWin , O : secondtWin.O + 1})
         setWinning(chance[a]);
+        setStyle(Win[i]);
+        if (chance[Win[i][0]] == "X") {
+          setFirstWin(firstWin + 1);
+        } else {
+          setSecondWin(secondWin + 1);
+        }
+        setShow(true);
       }
     }
   };
-  
+
   const Restart = () => {
     setWinning("");
     setCells(Array(9).fill(null));
     setTurns("X");
-    setPlayerName(state.firstname)
+    setPlayerName(state.firstname);
     setOScore(0);
     setXScore(0);
+    setShow(false);
   };
 
   const Box = ({ num }) => {
@@ -99,13 +100,10 @@ const TwoPlayerTicTocToe = () => {
       </h3>
       <h5 style={{ color: "red" }}> Score X : {xScore}</h5>
       <h5> Score O : {oScore} </h5>
-     
-      <h5> {state.firstname} Win : {firstWin.X}</h5>
-      <h5> {state.secondname} Win : {secondtWin.O}</h5>
-      
+
       <div className="container">
         <table cellSpacing="0">
-          {Playername} : {turns}{" "}
+          {Playername} : {turns}
           <tbody>
             <tr>
               <Box num={0} />
@@ -126,15 +124,23 @@ const TwoPlayerTicTocToe = () => {
         </table>
       </div>
       <br />
-      {winning && (
-        <>
-          <h3> {winPlayername} is the Winner</h3>
-          <Button variant="outline-secondary" onClick={() => Restart()}>
-            Restart Game
-          </Button>
-          <br /> <br />
-        </>
-      )}
+
+      <>
+        <Modal show={show} backdrop="static" keyboard={false} onHide = {handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Win Players</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h3 style = {{color :"blue"}}> {winPlayername} is the Winner</h3>
+            <h5> {state.firstname} Win : {firstWin} </h5>
+            <h5> {state.secondname} Win : {secondWin} </h5>
+            <Button variant="outline-secondary" onClick={() => Restart()}>
+              Restart Game
+            </Button>
+            
+          </Modal.Body>
+        </Modal>
+      </>
 
       <div>
         <Button variant="outline-primary" onClick={() => navigate("/")}>
