@@ -16,6 +16,7 @@ const TwoPlayerTicTocToe = () => {
   const [firstWin, setFirstWin] = useState(0);
   const [secondWin, setSecondWin] = useState(0);
   const [show, setShow] = useState(false);
+  
 
   const handleClose = () => setShow(false);
 
@@ -55,10 +56,10 @@ const TwoPlayerTicTocToe = () => {
 
     for (let i = 0; i < Win.length; i++) {
       const [a, b, c] = Win[i];
-      if (chance[a] && chance[a] === chance[b] && chance[b] === chance[c]) {
+      if (chance[a] && chance[a] === chance[b] && chance[a] === chance[c]) {
         setWinning(chance[a]);
         setStyle(Win[i]);
-        if (chance[Win[i][0]] == "X") {
+        if (chance[Win[i][0]] === "X") {
           setFirstWin(firstWin + 1);
         } else {
           setSecondWin(secondWin + 1);
@@ -66,7 +67,9 @@ const TwoPlayerTicTocToe = () => {
         setShow(true);
       }
     }
+    return null;
   };
+
 
   const Restart = () => {
     setWinning("");
@@ -98,8 +101,10 @@ const TwoPlayerTicTocToe = () => {
       <h3 style={{ color: "blue" }}>
         {state.firstname} Vs {state.secondname}
       </h3>
-      <h5 style={{ color: "red" }}> Score X : {xScore}</h5>
-      <h5> Score O : {oScore} </h5>
+      {/* <h5 style={{ color: "red" }}> Score X : {xScore}</h5>
+      <h5> Score O : {oScore} </h5> */}
+      <h5> {state.firstname} : X : {firstWin} </h5>
+      <h5> {state.secondname} : O : {secondWin} </h5>
 
       <div className="container">
         <table cellSpacing="0">
@@ -124,27 +129,33 @@ const TwoPlayerTicTocToe = () => {
         </table>
       </div>
       <br />
-
+      
       <>
         <Modal show={show} backdrop="static" keyboard={false} onHide = {handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Win Players</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <>
             <h3 style = {{color :"blue"}}> {winPlayername} is the Winner</h3>
             <h5> {state.firstname} Win : {firstWin} </h5>
             <h5> {state.secondname} Win : {secondWin} </h5>
+            </>
+            
             <Button variant="outline-secondary" onClick={() => Restart()}>
               Restart Game
             </Button>
-            
           </Modal.Body>
         </Modal>
       </>
+        
+        {winning == null && (
+          <p> Draw the match </p>
+        )}
 
       <div>
         <Button variant="outline-primary" onClick={() => navigate("/")}>
-          Back
+          Back to Front Page
         </Button>
       </div>
     </div>

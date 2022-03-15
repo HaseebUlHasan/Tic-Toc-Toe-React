@@ -10,10 +10,11 @@ const TicTocToe = () => {
   const [player, setPlayer] = useState("");
   const [playerWin , setPlayerWin] = useState(0);
   const [computerWin , setComputerWin] = useState(0);
+  
   const navigate = useNavigate();
 
-  console.log(cells, "cells"); 
-  console.log(winning, "winning");
+  // console.log(cells, "cells"); 
+  // console.log(winning, "winning");
 
   useEffect(() => {
     const Computer = cells.filter((cell) => cell !== null).length % 2 === 1;
@@ -26,7 +27,7 @@ const TicTocToe = () => {
     }; 
 
     if (Computer) {
-      const random = EmptyCells[Math.ceil(Math.random() * EmptyCells.length)];
+      const random = EmptyCells[Math.floor(Math.random() * EmptyCells.length)];
       console.log(random, "random");
       ComputerMove(random);
     }
@@ -41,25 +42,54 @@ const TicTocToe = () => {
       [0, 4, 8],
       [2, 4, 6],
     ];
-      
+      console.log(cells)
     for (let i = 0; i < Win.length; i++) {
       const [a, b, c] = Win[i];
       if (cells[a] && cells[a] === cells[b] && cells[b] === cells[c]) {
         setStyle(Win[i]);
         setWinning(cells[a]);
         if (cells[Win[i][0]] === "X") {
-          console.log(playerWin + 1 , "11")
+          console.log(playerWin + 1 , "Player")
           setPlayer("Player");
-          setPlayerWin(playerWin + 1 )
+          setPlayerWin(playerWin + 1);
         } else {
           setPlayer("Computer");
           setComputerWin(computerWin + 1 )
+          console.log(computerWin + 1 , "computer")
         }
-      }
+       }
+      
     } 
   }, [cells]);
 
-  
+  // useEffect(() => {
+  //   const Win = [
+  //     [0, 1, 2],
+  //     [3, 4, 5],
+  //     [6, 7, 8],
+  //     [0, 3, 6],
+  //     [1, 4, 7],
+  //     [2, 5, 8],
+  //     [0, 4, 8],
+  //     [2, 4, 6],
+  //   ];
+  //     console.log(cells)
+  //   for (let i = 0; i < Win.length; i++) {
+  //     const [a, b, c] = Win[i];
+  //     if (cells[a] && cells[a] === cells[b] && cells[b] === cells[c]) {
+  //       // setStyle(Win[i]);
+  //       // setWinning(cells[a]);
+  //       if (cells[Win[i][0]] === "X") {
+  //         console.log(playerWin + 1 , "Player")
+  //         setPlayer("Player");
+  //         setPlayerWin(playerWin + 1);
+  //       } else {
+  //         setPlayer("Computer");
+  //         setComputerWin(computerWin + 1 )
+  //         console.log(computerWin + 1 , "computer")
+  //       }
+  //     } }
+  // }, [playerWin] )
   
 
   const ClickHandle = (num) => {
@@ -80,6 +110,8 @@ const TicTocToe = () => {
     setWinning(null);
     setcells(Array(9).fill(null));
     setStyle("");
+    setComputerWin(0);
+    setPlayerWin(0);
   };
 
   const Cells = ({ num }) => {
@@ -130,9 +162,11 @@ const TicTocToe = () => {
         </>
       )}
        
+       
+
       <div >   
         <Button variant="outline-primary" onClick={() => navigate("/")}>
-         Back
+         Back to Front Page
       </Button>
       </div>
       
